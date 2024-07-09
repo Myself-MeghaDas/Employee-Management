@@ -78,7 +78,7 @@ if (isset($_GET['success']) && $_GET['success'] == 'true') {
                     const url = new URL(window.location);
                     url.searchParams.delete('success');
                     window.history.replaceState(null, null, url);
-                }, 3000); // Hide message after 3 seconds and clear the success parameter
+                }, 3000); 
             }
         }
         window.onload = showMessage;
