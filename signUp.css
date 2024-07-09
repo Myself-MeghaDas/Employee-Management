@@ -72,3 +72,13 @@ body {
 .form-container button:hover {
     opacity: 0.9;
 }
+.btn-add{
+    padding: 15px;
+    background-color: #009879;
+    text-decoration: none;
+    border-radius: 20px;
+    color: #dddddd;
+    float:right;
+    margin-bottom: 5px;
+    
+}
