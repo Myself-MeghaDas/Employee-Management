@@ -76,7 +76,7 @@ if (isset($_GET['success']) && $_GET['success'] == 'true') {
                     const url = new URL(window.location);
                     url.searchParams.delete('success');
                     window.history.replaceState(null, null, url);
-                }, 3000); 
+                }, 3000);
             }
         }
         window.onload = showMessage;
@@ -117,7 +117,12 @@ if (isset($_GET['success']) && $_GET['success'] == 'true') {
     <?php endif; ?>
 
     <div class="form-container">
-        <h2>Update Employee Details</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Update Employee Details</h2>
+            <a href="users.php" style="padding: 7px; background-color: #009879; color: white; text-decoration: none; border-radius: 22%;">
+                Go to User Panel</a>
+        </div>
+
         <form id="registrationForm" action="" method="post">
             <input type="text" name="Name" placeholder="Name" value="<?php echo htmlspecialchars($employee['name'] ?? ''); ?>">
             <input type="text" name="Email" placeholder="Email" value="<?php echo htmlspecialchars($employee['email'] ?? ''); ?>">
