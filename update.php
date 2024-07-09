@@ -4,11 +4,9 @@ require('./connection.php');
 $success = false;
 $error_message = '';
 
-// Check if ID is set in the URL
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
-    // Fetch employee data
     try {
         $p = crud::concet()->prepare('SELECT * FROM employee WHERE id = :id');
         $p->bindValue(':id', $id);
