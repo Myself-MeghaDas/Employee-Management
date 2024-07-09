@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
 
     if (!empty($name) && !empty($email) && !empty($phonenumber) && !empty($designation) && !empty($address) && !empty($gender)) {
         try {
-            $p = crud::concet()->prepare('INSERT INTO employee (name, email, phonenumber, designation, gender, address) VALUES (:n, :e, :p, :d,:g, :a)');
+            $p = self::concet()->prepare('INSERT INTO employee (name, email, phonenumber, designation, gender, address) VALUES (:n, :e, :p, :d,:g, :a)');
             $p->bindValue(':n', $name);
             $p->bindValue(':e', $email);
             $p->bindValue(':p', $phonenumber);
@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
             $p->bindValue(':g', $gender);
             $p->bindValue(':a', $address);
             $p->execute();
-            $p = crud::concet()->prepare('null');
+            $p = self::concet()->prepare('null');
             header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
             
             exit();

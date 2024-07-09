@@ -8,15 +8,21 @@ if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
     try {
-        $p = crud::concet()->prepare('SELECT * FROM employee WHERE id = :id');
-        $p->bindValue(':id', $id);
-        $p->execute();
-        $employee = $p->fetch(PDO::FETCH_ASSOC);
+        $con = Crud::connect();
+        $sql = "SELECT * FROM employee WHERE id = ?";
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $employee = $result->fetch_assoc();
 
         if (!$employee) {
             $error_message = 'Employee not found.';
         }
-    } catch (PDOException $e) {
+
+        $stmt->close();
+        $con->close();
+    } catch (mysqli_sql_exception $e) {
         $error_message = 'Error: ' . $e->getMessage();
     }
 }
@@ -31,19 +37,18 @@ if (isset($_POST['submit'])) {
 
     if (!empty($name) && !empty($email) && !empty($phonenumber) && !empty($designation) && !empty($address) && !empty($gender)) {
         try {
-            $p = crud::concet()->prepare('UPDATE employee SET name=:n,email=:e,phonenumber=:p,designation=:d,address=:a,gender=:g WHERE id=:id');
-            $p->bindValue(':n', $name);
-            $p->bindValue(':e', $email);
-            $p->bindValue(':p', $phonenumber);
-            $p->bindValue(':d', $designation);
-            $p->bindValue(':g', $gender);
-            $p->bindValue(':a', $address);
-            $p->bindValue(':id', $id);
-            $p->execute();
+            $con = Crud::connect();
+            $sql = "UPDATE employee SET name=?, email=?, phonenumber=?, designation=?, address=?, gender=? WHERE id=?";
+            $stmt = $con->prepare($sql);
+            $stmt->bind_param("ssssssi", $name, $email, $phonenumber, $designation, $address, $gender, $id);
+            $stmt->execute();
+            $stmt->close();
+            $con->close();
+
             header("Location: " . $_SERVER['PHP_SELF'] . "?id=$id&success=true");
             exit();
-        } catch (PDOException $e) {
-            if ($e->errorInfo[1] == 1062) {
+        } catch (mysqli_sql_exception $e) {
+            if ($con->errno == 1062) {
                 $error_message = 'Error: Duplicate entry found for email.';
             } else {
                 $error_message = 'Error: ' . $e->getMessage();

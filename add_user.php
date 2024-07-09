@@ -14,20 +14,18 @@ if (isset($_POST['submit'])) {
 
     if (!empty($name) && !empty($email) && !empty($phonenumber) && !empty($designation) && !empty($address) && !empty($gender)) {
         try {
-            $p = crud::concet()->prepare('INSERT INTO employee (name, email, phonenumber, designation, gender, address) VALUES (:n, :e, :p, :d,:g, :a)');
-            $p->bindValue(':n', $name);
-            $p->bindValue(':e', $email);
-            $p->bindValue(':p', $phonenumber);
-            $p->bindValue(':d', $designation);
-            $p->bindValue(':g', $gender);
-            $p->bindValue(':a', $address);
-            $p->execute();
-            $p = crud::concet()->prepare('null');
+            $con = Crud::connect();
+            $sql = "INSERT INTO employee (name, email, phonenumber, designation, gender, address) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt = $con->prepare($sql);
+            $stmt->bind_param("ssssss", $name, $email, $phonenumber, $designation, $gender, $address);
+            $stmt->execute();
+            $stmt->close();
+            $con->close();
+
             header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
-            
             exit();
-        } catch (PDOException $e) {
-            if ($e->errorInfo[1] == 1062) {
+        } catch (mysqli_sql_exception $e) {
+            if ($con->errno == 1062) {
                 $error_message = 'Error: Duplicate entry found for email.';
             } else {
                 $error_message = 'Error: ' . $e->getMessage();

@@ -1,26 +1,49 @@
 <?php
-class crud{
-    public static function concet(){
-        try {
-            $con=new PDO('mysql:localhost=host; dbname=crud','root','');
-            return $con;
-        } catch (PDOException $error1) {
-            echo "something went wrong,it was not possible to connect you to database !" .$error1->getMessage();
-        }catch(Exception $error2){
-            echo 'Generic error!' .$error2->getMessage();
+class Crud {
+    public static function connect() {
+        // $servername = "localhost";
+        // $username = "root";
+        // $password = "";
+        // $dbname = "crud";
+        $servername = "sql202.infinityfree.com";
+        $username = "if0_36871789";
+        $password = "ZVl5ZASKshaCfl5";
+        $dbname = "if0_36871789_crudoperation";
+        
+        // Create connection
+        $con = new mysqli($servername, $username, $password, $dbname);
+        
+        // Check connection
+        if ($con->connect_error) {
+            die("Connection failed: " . $con->connect_error);
         }
+        return $con;
     }
-    public static function selectdata(){
-        $data=array();
-        $p=crud::concet()->prepare('SELECT * FROM employee');
-        $p->execute();
-        $data=$p->fetchAll(PDO::FETCH_ASSOC);
+
+    public static function selectData() {
+        $con = self::connect();
+        $sql = "SELECT * FROM employee";
+        $result = $con->query($sql);
+        
+        $data = array();
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+        $con->close();
         return $data;
     }
-    public static function delete($id){
-        $p=crud::concet()->prepare('DELETE FROM employee WHERE id=:id');
-        $p->bindValue(':id',$id);
-        $p->execute();
+
+    public static function delete($id) {
+        $con = self::connect();
+        $sql = "DELETE FROM employee WHERE id=?";
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->close();
+        $con->close();
     }
 }
 ?>
