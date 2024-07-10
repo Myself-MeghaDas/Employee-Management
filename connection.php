@@ -1,14 +1,14 @@
 <?php
 class Crud {
     public static function connect() {
-        // $servername = "localhost";
-        // $username = "root";
-        // $password = "";
-        // $dbname = "crud";
-        $servername = "sql202.infinityfree.com";
-        $username = "if0_36871789";
-        $password = "ZVl5ZASKshaCfl5";
-        $dbname = "if0_36871789_crudoperation";
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "crud";
+        // $servername = "sql202.infinityfree.com";
+        // $username = "if0_36871789";
+        // $password = "ZVl5ZASKshaCfl5";
+        // $dbname = "if0_36871789_crudoperation";
         
         // Create connection
         $con = new mysqli($servername, $username, $password, $dbname);
